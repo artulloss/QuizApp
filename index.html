@@ -7,10 +7,42 @@
     <title>Document</title>
   </head>
   <body x-data="quiz">
-    <h1 x-text="correctAnswers"></h1>
-    <template x-for="question in questions" :key="question.id">
-      <span class="question" x-text="question.question"></span>
+    <h1
+      x-text="`Current Question: ${currentQuestion + 1} / ${questions.length}`"
+    ></h1>
+    <h1
+      x-text="`Correct Answers: ${correctAnswers} / ${questions.length}`"
+    ></h1>
+    <template
+      x-for="(question, questionNumber) in questions"
+      :key="question.id"
+    >
+      <div class="quiz-question" x-show="questionNumber === currentQuestion">
+        <span class="question" x-text="question.text"></span>
+        <div class="answers">
+          <template x-for="answer in question.answers">
+            <div class="option">
+              <input
+                type="radio"
+                x-bind:name="questionNumber"
+                x-bind:data-correct="answer.correct || false"
+                x-bind:id="answer.id"
+              />
+              <label x-text="answer.text" x-bind:for="answer.id"></label>
+            </div>
+          </template>
+        </div>
+      </div>
     </template>
+    <button @click="currentQuestion--" x-show="currentQuestion !== 0">
+      Previous Question
+    </button>
+    <button
+      @click="currentQuestion++"
+      x-show="currentQuestion !== questions.length - 1"
+    >
+      Next Question
+    </button>
     <script src="/js/main.js"></script>
     <script
       defer

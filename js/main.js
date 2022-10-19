@@ -1,6 +1,6 @@
 const questions = [
   {
-    question: "What is 2 + 2?",
+    text: "What is 2 + 2?",
     answers: [
       { text: "4", correct: true },
       { text: "22" },
@@ -9,7 +9,7 @@ const questions = [
     ],
   },
   {
-    question: "What color is the sky?",
+    text: "What color is the sky?",
     answers: [
       { text: "Blue", correct: true },
       { text: "Red" },
@@ -18,7 +18,7 @@ const questions = [
     ],
   },
   {
-    question: "What is the best scripting language?",
+    text: "What is the best scripting language?",
     answers: [
       { text: "Python" },
       { text: "Lua" },
@@ -27,7 +27,7 @@ const questions = [
     ],
   },
   {
-    question: "Why does C get all the girls, but Java doesn't?",
+    text: "Why does C get all the girls, but Java doesn't?",
     answers: [
       { text: "C is a classier language" },
       { text: "Because C doesn't treat them like objects", correct: true },
@@ -36,7 +36,7 @@ const questions = [
     ],
   },
   {
-    question: "What is the first letter of the alphabet?",
+    text: "What is the first letter of the alphabet?",
     answers: [
       { text: "B" },
       { text: "C" },
@@ -44,15 +44,21 @@ const questions = [
       { text: "A", correct: true },
     ],
   },
-].map((question, index) => {
+].map((question, i) => {
   // Alpine needs unique keys for looping https://alpinejs.dev/directives/for#keys
-  question.id = index + 1;
+  question.id = i + 1;
+//   console.log(question);
+  question.answers = question.answers.map((answer, j) => {
+    answer.id = j + 1;
+    return answer;
+  });
   return question;
 });
+
+console.log(questions);
 
 // const data = Alpine.reactive({
 //   correctAnswers: 0,
 //   currentQuestion: 0,
 //   questions,
 // });
-
