@@ -5,7 +5,7 @@ const questions = [
       { text: "4", correct: true },
       { text: "22" },
       { text: "7" },
-      { text: "6" },
+      { text: "6" }
     ],
   },
   {

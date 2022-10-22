@@ -4,45 +4,66 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
     <title>Document</title>
   </head>
-  <body x-data="quiz">
-    <h1
-      x-text="`Current Question: ${currentQuestion + 1} / ${questions.length}`"
-    ></h1>
-    <h1
-      x-text="`Correct Answers: ${correctAnswers} / ${questions.length}`"
-    ></h1>
-    <template
-      x-for="(question, questionNumber) in questions"
-      :key="question.id"
-    >
-      <div class="quiz-question" x-show="questionNumber === currentQuestion">
-        <span class="question" x-text="question.text"></span>
-        <div class="answers">
-          <template x-for="answer in question.answers">
-            <div class="option">
-              <input
-                type="radio"
-                x-bind:name="questionNumber"
-                x-bind:data-correct="answer.correct || false"
-                x-bind:id="answer.id"
-              />
-              <label x-text="answer.text" x-bind:for="answer.id"></label>
-            </div>
-          </template>
+  <body>
+    <div class="quiz" x-data="quiz">
+      <template
+        x-bind:class="() => console.log({questions, currentQuestion, correctAnswers})"
+      >
+        Debug
+      </template>
+      <h1
+        x-text="`Current Question: ${currentQuestion + 1} / ${questions.length}`"
+      ></h1>
+      <template
+        x-for="(question, questionNumber) in questions"
+        :key="question.id"
+      >
+        <div class="quiz-question" x-show="questionNumber === currentQuestion">
+          <span class="question" x-text="question.text"></span>
+          <div class="quiz-question-answers">
+            <template x-for="answer in question.answers">
+              <div class="quiz-question-answers-option">
+                <input
+                  class="quiz-question-answers-option-input"
+                  type="radio"
+                  x-bind:name="questionNumber"
+                  x-bind:data-correct="answer.correct || false"
+                  x-bind:id="answer.id"
+                />
+                <label
+                  class="quiz-question-answers-option-label"
+                  x-text="answer.text"
+                  x-bind:for="answer.id"
+                ></label>
+              </div>
+            </template>
+          </div>
         </div>
-      </div>
-    </template>
-    <button @click="currentQuestion--" x-show="currentQuestion !== 0">
-      Previous Question
-    </button>
-    <button
-      @click="currentQuestion++"
-      x-show="currentQuestion !== questions.length - 1"
-    >
-      Next Question
-    </button>
+      </template>
+      <button
+        class="btn"
+        @click="() => currentQuestion--"
+        x-show="currentQuestion !== 0"
+      >
+        Previous Question
+      </button>
+      <button
+        class="btn"
+        @click="() => currentQuestion++"
+        x-show="currentQuestion !== questions.length - 1"
+      >
+        Next Question
+      </button>
+    </div>
     <script src="/js/main.js"></script>
     <script
       defer
@@ -50,13 +71,19 @@
     ></script>
     <script>
       document.addEventListener("alpine:init", () => {
-        Alpine.data("quiz", () => {
-          return {
-            questions,
-            currentQuestion: 0,
-            correctAnswers: 0,
-          };
-        });
+        Alpine.data("quiz", () => ({
+          questions,
+          currentQuestion: 0,
+          get correctAnswers() {
+            return this.questions.filter((question, questionNumber) => {
+              return document.querySelector(
+                `input[name="${questionNumber}"][data-correct="true"]`
+              )?.checked
+                ? 1
+                : 0;
+            }).length;
+          },
+        }));
       });
     </script>
   </body>
