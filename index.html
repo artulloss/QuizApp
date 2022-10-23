@@ -51,7 +51,7 @@
                   class="quiz-question-answers-option-input"
                   type="radio"
                   x-bind:name="questionNumber"
-                  x-bind:data-correct="answer.correct || false"
+                  x-bind:data-correct="answer.correct"
                   x-bind:id="String(questionNumber) + String(answer.id)"
                   @click="() => progress = calcProgress()"
                 />
