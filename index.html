@@ -96,7 +96,7 @@
       <div class="quiz-footer">
         <div
           class="quiz-footer-progress-bar"
-          x-bind:style="`--progress-bar-progress: ${progress / questions.length * 100}%`"
+          x-bind:style="`--progress-bar-progress: ${(isSubmitted ? (currentQuestion / (questions.length - 1)) : (progress / questions.length)) * 100}%`"
         ></div>
       </div>
     </div>

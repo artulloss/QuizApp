@@ -9,6 +9,15 @@ const questions = [
     ],
   },
   {
+    text: "What is \"1\" + 2?",
+    answers: [
+      { text: "4", correct: true },
+      { text: '"12"' },
+      { text: "7" },
+      { text: "3" },
+    ],
+  },
+  {
     text: "What color is the sky?",
     answers: [
       { text: "Blue", correct: true },
