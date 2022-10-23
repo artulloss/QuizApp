@@ -19,11 +19,6 @@
       x-data="quiz"
       x-init="$watch('isSubmitted', () => correctAnswers = calcCorrectAnswers())"
     >
-      <template
-        x-bind:class="() => console.log({questions, currentQuestion, correctAnswers, progress})"
-      >
-        Debug
-      </template>
       <div class="quiz-header">
         <h1 x-text="quizHeading"></h1>
         <div x-show="!isSubmitted" class="quiz-header-during">
