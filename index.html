@@ -94,14 +94,10 @@
         </button>
       </div>
       <div class="quiz-footer">
-        <div class="quiz-footer-progress">
-          <div class="progress-bar">
-            <div
-              class="progress-bar-fill"
-              x-bind:style="`width: ${progress / questions.length * 100}%`"
-            ></div>
-          </div>
-        </div>
+        <div
+          class="quiz-footer-progress-bar"
+          x-bind:style="`--progress-bar-progress: ${progress / questions.length * 100}%`"
+        ></div>
       </div>
     </div>
     <script src="/js/main.js"></script>
