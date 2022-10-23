@@ -5,7 +5,7 @@ const questions = [
       { text: "4", correct: true },
       { text: "22" },
       { text: "7" },
-      { text: "6" }
+      { text: "6" },
     ],
   },
   {
@@ -47,7 +47,7 @@ const questions = [
 ].map((question, i) => {
   // Alpine needs unique keys for looping https://alpinejs.dev/directives/for#keys
   question.id = i + 1;
-//   console.log(question);
+  //   console.log(question);
   question.answers = question.answers.map((answer, j) => {
     answer.id = j + 1;
     return answer;
@@ -55,10 +55,59 @@ const questions = [
   return question;
 });
 
-console.log(questions);
-
-// const data = Alpine.reactive({
-//   correctAnswers: 0,
-//   currentQuestion: 0,
-//   questions,
-// });
+document.addEventListener("alpine:init", () => {
+  Alpine.data("quiz", function () {
+    return {
+      quizHeading: "Quiz",
+      questions,
+      currentQuestion: 0,
+      correctAnswers: 0,
+      calcCorrectAnswers() {
+        // Calculate the number of correct answers
+        return this.questions.filter((question, questionNumber) => {
+          return document.querySelector(
+            `input[name="${questionNumber}"][data-correct="true"]`
+          )?.checked;
+        }).length;
+      },
+      progress: 0,
+      calcProgress() {
+        // This is called from the watcher and checks when we submit the form
+        console.log(this.questions, "questions");
+        const p = this.questions.filter((question, questionNumber) => {
+          return Array.from(
+            document.querySelectorAll(`input[name="${questionNumber}"]`)
+          ).some((answer) => answer.checked);
+        }).length;
+        console.log({ p });
+        return p;
+      },
+      isSubmitted: false,
+      getNextButtonClass: () => {
+        console.log(this.currentQuestion, "currentQuestion");
+        const noPrev = this.currentQuestion === 0;
+        const filledOut = (progress = questions.length);
+        // console.log({ noPrev, filledOut });
+        return noPrev && filledOut ? "no-prev" : "";
+      },
+      highlightCorrectAnswers() {
+        // Highlight the correct answers
+        // Calculate the number of correct answers
+        this.questions.forEach((question, questionNumber) => {
+          document
+            .querySelectorAll(`input[name="${questionNumber}"]`)
+            .forEach((e) => {
+              e.disabled = true;
+              console.log(e.data);
+              if (e.dataset?.correct) {
+                e.classList.add("quiz-question-answers-option-input--highlight-correct");
+              }
+            });
+        });
+      },
+      calcScorePercent(correct, total) {
+        return Math.round((correct / total) * 100);
+      },
+    };
+  });
+});
